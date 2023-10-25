@@ -1,0 +1,76 @@
+#include <iostream>
+#include <cstring>
+
+
+using namespace std;
+
+int main() {
+    setlocale(LC_ALL, "russian");
+    int total;
+    cout << "Введите количество проданных товаров: ";
+    cin >> total;
+
+    // Выделяем динамические массивы для названий товаров из количества и цены за единицу товара
+    char** names = new char* [total];
+    int* kolvo = new int[total];
+    double* coast = new double[total];
+    // Счет общей суммы товаров и средней цены
+    double totalSum = 0;
+    double totalQuantity = 0;
+    int cnt = 0;
+
+    cin.ignore(); // очищаем буфер после ввода числа
+
+    // Ввод названий товара их количества и цены за единицу
+    for (int i = 0; i < total; ++i) {
+        cout << "Введите название товара " << i + 1 << ": ";
+        char buffer[100];
+        cin.getline(buffer, 100);
+        names[i] = new char[strlen(buffer) + 1];
+        strcpy( names[i], buffer);
+
+        cout << "Введите количество товара " << i + 1 << ": ";
+        cin >> kolvo[i];
+        cnt += kolvo[i];
+        cout << "Введите цену за единицу товара " << i + 1 << ": ";
+        cin >> coast[i];
+        totalSum += double(kolvo[i] * coast[i]);
+
+        cin.ignore(); // очищаем буфер после ввода числа
+    }
+    for (int i = 0; i < total; i++)
+    {
+        cout << names[i] << endl;
+   }
+    totalQuantity = double(totalSum / cnt);
+    // Сортировка названий товаров по алфавиту
+    for (int i = 0; i < total - 1; ++i) {
+        for (int j = 0; j < total - i - 1; ++j) {
+            if (strcmp(names[j], names[j + 1]) > 0) {
+                swap(names[j], names[j + 1]);
+                swap(kolvo[j], kolvo[j + 1]);
+                swap(coast[j], coast[j + 1]);
+            }
+        }
+    }
+
+    // Вывод отсортированного списка товаров
+    cout << "\nОтсортированный список товаров:\n";
+    for (int i = 0; i < total; ++i) {
+        cout << names[i] << endl;
+    }
+    cout << totalSum << " " << totalQuantity;
+
+    
+
+
+   
+    // Освобождаем выделенную память
+    for (int i = 0; i < total; ++i) {
+        delete[] names[i];
+    }
+    delete[] names;
+    delete[] kolvo;
+
+    return 0;
+}
